@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -14,38 +15,50 @@ public class AccountTests {
         this.expected = expected;
     }
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Test data: {0} {1}")
     public static Object[] getData() {
         return new Object[][]{
                 {"aa ", false},
                 {" a", false},
                 {"bbb", false},
-                {"aaaaaaaaaaaaaaaaaaa", false},
+                {"paaaaaaaaaaaaaaaaaa", false},
                 {"aaaaaaaaa aaaaaaaa", true},
-                {"aaaaaaaaaaaaaaaaaa ", false},
+                {"faaaaaaaaaaaaaaaaa ", false},
                 {"a a", true},
                 {"aaaa", false},
                 {" aaa", false},
-                {" aaaaaaaaaaaaaaaaaa", false},
+                {" aaaaaaaaaaaaaaaaad", false},
                 {"a ", false},
-                {" aaaaaaaaaaaaaaaaaaa", false},
+                {" aaaaaaaaaaaaaaaaaac", false},
                 {"aaaaaaaaaaaaaaaaa ", false},
                 {"aaaaaaaaaaaaaaaaaaa ", false},
                 {"aaaaaaaaa aaaaaaaaa", true},
-                {"aaaaaaaaa aaaaaaaaaa", false},
-                {" aaaaaaaaaaaaaaaaaa", false},
-                {"aaaaaaaaaaaaaaaaaa", false},
+                {"aaaaaaaaa aaaaaaaaax", false},
+                {" aaaaaaaaaaaaaaaaay", false},
+                {"aaaaaaaaaaaaaaaaaz", false},
                 {"aaa ", false},
-                {"aaaaaaaaaaaaaaaaaaaa", false},
+                {"aaaaaaaaaaaaaaaaaaab", false},
                 {"aa", false},
                 {"aa a", true},
-                {" aa", false}
+                {" aa", false},
+                {" ", false},
+                {null, false}
         };
     }
 
     @Test
     public void checkAccountName() {
-        Account account = new Account(accountName);
+        Account account = createAccount(accountName);
+        checkAccount(account, expected);
+    }
+
+    @Step("Create account")
+    public static Account createAccount(String name) {
+        return new Account(name);
+    }
+
+    @Step("Check account")
+    public static void checkAccount(Account account, boolean expected) {
         assertEquals(expected, account.checkNameToEmboss());
     }
 }
